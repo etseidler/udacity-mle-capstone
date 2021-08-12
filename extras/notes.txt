@@ -1,0 +1,54 @@
+gathering data
+
+custom interactive python and shell scripting used to select 500 random real faces from the following kaggle dataset
+
+https://www.kaggle.com/atulanandjha/lfwpeople
+
+python code here
+
+https://stackoverflow.com/a/3207973/1113872
+from os import walk
+for (dirpath, dirnames, filenames) in walk('.'):
+    f.append(filenames[0])
+    continue
+
+from random import sample
+random_real_images = sample(f, 500)
+
+with open('out.txt', 'w') as f:
+    for r in random_real_images:
+         f.write(f'{r}\n')
+
+
+this created out.txt with 500 random real images.
+then i wrote custom shell script to copy each one into a single folder
+
+for i in `cat out.txt`; do cp */$i 500_rand_real; done
+
+
+then i manually looked at real images to ensure each had only one face in the image.
+
+note that first selection of 500 images yielded (about 350) without other recognizable parts of humans in them
+
+second set was selected in the same way. dupes were removed. all were moved to same folder. then sort -R was used to remove the 159 extra from the second pass.
+
+getting the fake face images
+
+
+https://stackoverflow.com/a/23489503/1113872
+used for basis of getting image from website.
+sleep added so website wouldn't block my requests
+
+
+import requests
+
+url = 'https://thispersondoesnotexist.com/image'
+
+for i in range(500):
+    response = requests.get(url)
+    with open(f'image{str(i)}.jpg', 'wb') as f:
+        f.write(response.content)
+    sleep(10)
+
+
+
